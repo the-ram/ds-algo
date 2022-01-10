@@ -49,7 +49,8 @@ public class ArrayOps {
         return true;
     }
 
-    // two pointer approach
+    // two pointer approach. One iteration can be reduced if an in-place replace is
+    // used as well
     public long[] reverseArray(long[] arrayToReverse) {
         int arrayLength = arrayToReverse.length;
         if (arrayLength == 1)
@@ -63,6 +64,66 @@ public class ArrayOps {
             }
         }
         return reversedArray;
+    }
+
+    // Given an array move non duplicates upfront in place and then return size .
+    // Note input is sorted already
+    public int removeDuplicatesInPlace(long[] duplicatesToReplace) {
+        int arrayLength = duplicatesToReplace.length;
+        int resIndex = 1;
+
+        for (int currentIndex = 1; currentIndex < arrayLength; currentIndex++) {
+            if (duplicatesToReplace[currentIndex] != duplicatesToReplace[resIndex - 1]) {
+                duplicatesToReplace[resIndex] = duplicatesToReplace[currentIndex];
+                resIndex++;
+            }
+        }
+        return resIndex;
+    }
+
+    public long[] moveZerosToEnd(long[] arrayWithZeros) {
+        int arrayLength = arrayWithZeros.length;
+        int countOfNonZeros = 0;
+        for (int currentIndex = 0; currentIndex < arrayLength; currentIndex++) {
+            if (arrayWithZeros[currentIndex] != 0) {
+                long temp = arrayWithZeros[currentIndex];
+                long swapIndex = arrayWithZeros[countOfNonZeros];
+                arrayWithZeros[countOfNonZeros] = temp;
+                arrayWithZeros[currentIndex] = swapIndex;
+                countOfNonZeros++;
+            }
+        }
+        return arrayWithZeros;
+    }
+
+    public long[] leftRotate(long[] arrayToRotate) {
+        int arrayLength = arrayToRotate.length;
+        long head = arrayToRotate[0];
+        for (int currentIndex = 1; currentIndex < arrayLength; currentIndex++) {
+            arrayToRotate[currentIndex - 1] = arrayToRotate[currentIndex];
+            if (currentIndex == arrayLength - 1) {
+                // last element
+                arrayToRotate[currentIndex] = head;
+            }
+        }
+        return arrayToRotate;
+    }
+
+    public long[] leftRotateByN(long[] arrayToRotate, int placesToRotate) {
+        int arrayLength = arrayToRotate.length;
+        long[] placesToMoveArray = new long[placesToRotate];
+        for (int currentIndex = 0; currentIndex < placesToRotate; currentIndex++) {
+            placesToMoveArray[currentIndex] = arrayToRotate[currentIndex];
+        }
+
+        for (int currentIndex = placesToRotate; currentIndex < arrayLength; currentIndex++) {
+            arrayToRotate[currentIndex-placesToRotate] = arrayToRotate[currentIndex];
+        }
+
+        for (int currentIndex = 0; currentIndex < placesToRotate; currentIndex++) {
+            arrayToRotate[arrayLength-placesToRotate+currentIndex] = placesToMoveArray[currentIndex];
+        }
+        return arrayToRotate;
     }
 
 }
